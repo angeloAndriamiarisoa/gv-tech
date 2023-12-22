@@ -1,0 +1,11 @@
+ .label {
+      -fx-padding: 10px 20px;
+      -fx-margin: 10px;
+}
+.label.clicked {
+    -fx-background-color: #999999;
+}
+.scroll-bar {
+    -fx-background-color: #87CEEB;
+    -fx-border-color: #000;
+}

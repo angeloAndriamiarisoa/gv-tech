@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane minWidth="200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.techimage.projectjfx.controller.NavigationBar">
+   <top>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+      <VBox fx:id="nav" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="503.0" prefWidth="216.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+         <children>
+                  <AnchorPane prefHeight="33.0" prefWidth="234.0">
+                     <children>
+                        <ImageView fitHeight="124.0" fitWidth="194.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../assets/icon/logo.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <Separator prefWidth="200.0" />
+            <AnchorPane prefHeight="33.0" prefWidth="234.0">
+               <children>
+                  <Label fx:id="dashboardItem" contentDisplay="TOP" ellipsisString="Dashboard" onMouseClicked="#toDashboard" prefHeight="40.0" prefWidth="234.0" styleClass="nav-item" text="Dashboard">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+               </children>
+            </AnchorPane>
+                  <Separator prefHeight="37.0" prefWidth="200.0" />
+            <AnchorPane prefHeight="34.0" prefWidth="216.0" styleClass="anchor">
+               <children>
+                  <Label fx:id="customerItem" contentDisplay="TOP" ellipsisString="Client" onMouseClicked="#toCustomer" prefHeight="40.0" prefWidth="200.0" styleClass="nav-item" text="Client">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="40.0" prefWidth="216.0">
+               <children>
+                  <Label fx:id="productItem" contentDisplay="TOP" ellipsisString="Produit" onMouseClicked="#toProduct" prefHeight="40.0" prefWidth="200.0" styleClass="nav-item" text="Produit">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+               </children>
+            </AnchorPane>
+                  <Separator prefHeight="37.0" prefWidth="200.0" />
+                  <AnchorPane prefHeight="40.0" prefWidth="216.0">
+                     <children>
+                        <Label fx:id="purchageItem" contentDisplay="TOP" ellipsisString="Produit" onMouseClicked="#toProduct" prefHeight="40.0" prefWidth="200.0" styleClass="nav-item" text="Achat">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="40.0" prefWidth="216.0">
+                     <children>
+                        <Label fx:id="saleItem" contentDisplay="TOP" ellipsisString="Produit" onMouseClicked="#toProduct" prefHeight="40.0" prefWidth="200.0" styleClass="nav-item" text="Vente">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+         </children>
+      </VBox>
+         </children>
+      </AnchorPane>
+   </top>
+</BorderPane>

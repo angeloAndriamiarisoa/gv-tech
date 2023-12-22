@@ -1,0 +1,69 @@
+/* mycss.css */
+
+#navigationPart {
+    -fx-background-color: rgb(3, 55, 101);
+    -fx-padding: 10px;
+}
+#navigation-bar {
+    -fx-background-color: #efefef;
+}
+#bodyPart {
+    -fx-padding: 5px; /* Rembourrage */
+    -fx-background-color: #f2f2f2;
+}
+
+.nav-item {
+    -fx-text-fill: #333333;
+    -fx-padding: 0px 10px;
+    -fx-font-weight: 800;
+    -fx-font-size: 1.5em;
+    -fx-border-width: 0px 0px 0px 5px ;
+    -fx-border-color: #fff;
+}
+.nav-item.clicked {
+    -fx-text-fill: #067ae1;
+    -fx-border-width: 0px 0px 0px 5px ;
+    -fx-border-color: #067ae1;
+}
+
+.nav-item:hover {
+    -fx-text-fill: rgba(6, 122, 225, 0.6);
+   /* -fx-border-width: 0px 0px 0px 5px ;
+    -fx-border-color: rgba(6, 122, 225, 0.6);*/
+}
+
+#borderPane {
+    -fx-min-width: 1000.0;
+}
+
+/*Button action cell*/
+.actionbtn {
+    -fx-border-width: 1px;
+    -fx-max-height: 15px;
+    -fx-background-color: #c117d3;
+}
+
+.actionbtnadd {
+    -fx-background-color: #9cd2ff;
+
+}
+.actionbtnadd:hover {
+    -fx-background-color: #66b4f5;
+}
+
+
+
+.actionbtndelete {
+    -fx-background-color: #ef6363;
+}
+
+.actionbtndelete:hover {
+    -fx-background-color: #e10d0d;
+}
+
+.actionbtnupdate {
+    -fx-background-color: #c117d3;
+}
+.actionbtnupdate:hover {
+    -fx-border-color: #ecd714;
+}
