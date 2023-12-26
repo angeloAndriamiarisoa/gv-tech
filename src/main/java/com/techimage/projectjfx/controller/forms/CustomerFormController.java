@@ -2,6 +2,7 @@ package com.techimage.projectjfx.controller.forms;
 
 import com.techimage.projectjfx.EventBtn;
 import com.techimage.projectjfx.annotations.TextValidation;
+import com.techimage.projectjfx.controller.toast.Toast;
 import com.techimage.projectjfx.exception.ValidationException;
 import com.techimage.projectjfx.model.Customer;
 import com.techimage.projectjfx.util.ValidationUtil;
@@ -96,12 +97,12 @@ public class CustomerFormController implements Initializable {
     private void save () {
         ValidationUtil validation = new ValidationUtil(addCustomerController);
         try {
+            Toast.start("Ajout réussi", Toast.WARNING);
             validation.textValidation();
             //Dao save
         }
         catch (ValidationException exception) {
-            System.out.println(validation.getErrors());
-            System.out.println(validation.getErrors().keySet());
+           // throw new RuntimeException(exception);
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {

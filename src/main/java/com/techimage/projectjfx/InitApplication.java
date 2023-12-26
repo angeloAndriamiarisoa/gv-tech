@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class InitApplication  {
-    private Stage primaryStage;
+    public static Stage primaryStage;
     private BorderPane rootContainer;
     public InitApplication  (Stage stage) {
         Application.setUserAgentStylesheet(MainApp.class.getResource("assets/css/primer-light.css").toExternalForm());

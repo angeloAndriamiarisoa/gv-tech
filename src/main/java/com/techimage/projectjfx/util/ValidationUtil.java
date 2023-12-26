@@ -39,7 +39,6 @@ public class ValidationUtil {
                    if(!this.testRegex(fieldValue, textValidation.regex())) {
                        error = error.concat(textValidation.message() + "\n");
                    }
-                   System.out.println(fieldValue.length());
                    if(fieldValue.length() < textValidation.minLength()) {
                        error = error.concat(
                                String.format("`%s` doit contenir au moins %d caractères\n", textValidation.label(), textValidation.minLength()));
