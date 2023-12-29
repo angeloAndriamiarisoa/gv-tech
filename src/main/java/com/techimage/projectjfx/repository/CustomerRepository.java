@@ -1,5 +1,9 @@
 package com.techimage.projectjfx.repository;
 
-public class CustomerRepository {
+import com.techimage.projectjfx.model.Customer;
 
+public class CustomerRepository extends GenericCrudImpl<Customer, String> {
+    public CustomerRepository () {
+        super(new Customer());
+    }
 }

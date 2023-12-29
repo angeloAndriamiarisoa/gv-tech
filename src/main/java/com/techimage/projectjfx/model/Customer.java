@@ -1,15 +1,22 @@
 package com.techimage.projectjfx.model;
 
+import com.techimage.projectjfx.annotations.entity.Entity;
+
+@Entity(pk = "phone")
 public class Customer {
     private String name;
     private String phone;
+
     private String email;
 
     public Customer(String name, String phone, String email) {
         this.name = name;
+
         this.phone = phone;
         this.email = email;
     }
+
+    public Customer (){}
 
     public String getName() {
         return name;

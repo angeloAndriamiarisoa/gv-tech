@@ -27,7 +27,6 @@ public class Toast {
         ImageView imageView = new ImageView();
         String url = ResourceUtil.getIconUrl(messageType).toExternalForm();
 
-
         Image image = new Image(url);
         imageView.setImage(image);
         imageView.setFitHeight(40.0);
@@ -58,7 +57,6 @@ public class Toast {
                 new KeyFrame(displayTime, new KeyValue(toastStage.getScene().getRoot().opacityProperty(), 1)),
                 new KeyFrame(displayTime.add(Duration.millis(200 )), new KeyValue(toastStage.getScene().getRoot().opacityProperty(), 0))
         );
-
 
         timeline.setOnFinished(event -> toastStage.hide());
         toastStage.show();
