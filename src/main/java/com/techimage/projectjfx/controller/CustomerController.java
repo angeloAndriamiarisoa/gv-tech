@@ -41,6 +41,9 @@ public class CustomerController implements Initializable {
     @FXML
     public Button btnShowDialog;
 
+    @FXML
+    public Pagination pagination;
+
     private ObservableList<Customer> customerList;
 
     public static Stage dialog;
@@ -50,8 +53,20 @@ public class CustomerController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        fillTable();
+        fillTable(1);
         initBtnShowDialog();
+        int totalItems = this.customerRepository.countAll();
+        int perPage = 5;
+        com.techimage.projectjfx.controller.pagination.Pagination.setPaginationFactory(
+                pagination,
+                totalItems,
+                perPage
+        );
+        pagination.currentPageIndexProperty().addListener((observableValue, oldValue, newValue) -> {
+            fillTable((Integer) newValue + 1);
+        });
+
+
     }
 
     private void initBtnShowDialog() {
@@ -71,18 +86,18 @@ public class CustomerController implements Initializable {
             @Override
             public Object apply(Object o) {
                 customerToEdit = null;
-                CustomerController.this.fillTable();
+                CustomerController.this.fillTable(1);
                 return null;
             }
         });
     }
 
-    private void fillTable () {
+    private void fillTable (Integer page) {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
 
-        customerList = FXCollections.observableArrayList(this.customerRepository.findAll());
+        customerList = FXCollections.observableArrayList(this.customerRepository.findAll(page));
         tableCustomer.setItems(customerList);
         actionsColumn.setCellFactory(param -> {
 
@@ -111,7 +126,7 @@ public class CustomerController implements Initializable {
                         if(alert.getResult().getButtonData() == ButtonBar.ButtonData.OK_DONE) {
                             customerRepository.delete(customer.getPhone());
                             Toast.start("Client supprimé!", Toast.SUCCESS);
-                            fillTable();
+                            fillTable(1);
                         }
 
                     }

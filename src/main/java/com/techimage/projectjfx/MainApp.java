@@ -25,7 +25,8 @@ public class MainApp extends Application  {
 
 
     public static void main(String[] args) {
-        new CustomerRepository().save(new Customer("angelo", "phone", "email"));
+        System.out.println(new CustomerRepository().countAll());
+
         launch();
     }
 }

@@ -47,6 +47,25 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
         return finalMethod;
     }
 
+    @Override
+    public Integer countAll() {
+        Integer total = 0;
+        String countQuery = String.format("SELECT COUNT(%s) FROM %s",
+                this.genericEntity.getClass().getAnnotation(Entity.class).pk(),
+                this.genericEntity.getClass().getSimpleName()
+                );
+        try {
+            Statement statement = DbUtil.dbConnect().createStatement();
+            ResultSet resultSet = statement.executeQuery(countQuery);
+            while (resultSet.next()) {
+                total = resultSet.getInt(1);
+            }
+            return total;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void save(E entity) {
         StringBuilder columnNames = new StringBuilder();
         StringBuilder values = new StringBuilder();
@@ -88,7 +107,7 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
             throw new RuntimeException(e);
         }
         catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
+            throw new DatabaseException(e.getErrorCode());
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
@@ -97,15 +116,21 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
 
 
     }
-    public List<E> findAll() {
+    public List<E> findAll(Integer page) {
+        int limit = 5;
+        int offset = (page - 1)*limit;
         List<E> list = new ArrayList<>();
         Statement statements = null;
         E entity = null;
         try {
             entity = (E) this.genericEntity.getClass().getDeclaredConstructor().newInstance();
             statements = DbUtil.dbConnect().createStatement();
-            ResultSet resultSet =  statements.executeQuery(String.format("select * from %s",
-                    entity.getClass().getSimpleName()));
+            ResultSet resultSet =  statements.executeQuery(String.format(
+                    "SELECT * from %s LIMIT %s OFFSET %s ",
+                    entity.getClass().getSimpleName(),
+                    limit,
+                    offset
+                    ));
             while (resultSet.next()) {
                 entity = (E) this.genericEntity.getClass().getDeclaredConstructor().newInstance();
                 Method[] methods =  entity.getClass().getDeclaredMethods();
@@ -127,6 +152,7 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
             throw new RuntimeException(e);
         }
         catch (SQLException e) {
+
             throw new DatabaseException(e.getMessage());
         } catch (InstantiationException e) {
             throw new RuntimeException(e);
@@ -249,7 +275,7 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
+            throw new DatabaseException(e.getErrorCode());
         }
     }
 
