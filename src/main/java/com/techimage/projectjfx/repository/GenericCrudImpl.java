@@ -1,8 +1,10 @@
 package com.techimage.projectjfx.repository;
 
 import com.techimage.projectjfx.annotations.entity.Entity;
+import com.techimage.projectjfx.exception.DatabaseException;
 import com.techimage.projectjfx.exception.NotFoundEntity;
 import com.techimage.projectjfx.util.DbUtil;
+
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -10,6 +12,7 @@ import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
     private E genericEntity;
@@ -24,7 +27,6 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
             columns.add(field.getName());
         }
         Collections.sort(columns);
-
         return columns;
     }
     private ArrayList<Method> getMethodsGet (E entity) {
@@ -46,7 +48,6 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
     }
 
     public void save(E entity) {
-
         StringBuilder columnNames = new StringBuilder();
         StringBuilder values = new StringBuilder();
         ArrayList<String> fields = getColumnsName(entity);
@@ -81,8 +82,17 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
             statement.executeUpdate();
             statement.close();
             DbUtil.dbDisconnect();
-        } catch (SQLException | IllegalAccessException | InvocationTargetException e) {
+            System.out.println("ajout ok!");
+
+        } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
+        }
+        catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
 
@@ -93,35 +103,36 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
         E entity = null;
         try {
             entity = (E) this.genericEntity.getClass().getDeclaredConstructor().newInstance();
-        } catch (InstantiationException
-                 | IllegalAccessException
-                 | InvocationTargetException
-                 | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
             statements = DbUtil.dbConnect().createStatement();
             ResultSet resultSet =  statements.executeQuery(String.format("select * from %s",
                     entity.getClass().getSimpleName()));
             while (resultSet.next()) {
+                entity = (E) this.genericEntity.getClass().getDeclaredConstructor().newInstance();
                 Method[] methods =  entity.getClass().getDeclaredMethods();
                 for (Method method : methods) {
                     if(method.getName().contains("set")) {
                         method.invoke(entity, resultSet.getObject(
                                 method.getName().toLowerCase().substring(3)));
-                        list.add(entity);
                     }
                 }
+                list.add(entity);
+
             }
             DbUtil.dbDisconnect();
-        } catch (SQLException
-                 | IllegalAccessException
+            System.out.println(list);
+            return list;
+
+        } catch ( IllegalAccessException
                  | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
-
-        return null;
+        catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
     private ResultSet queryingById(T id) {
         String idName = null;
@@ -148,7 +159,7 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
             return statement.executeQuery();
         }
         catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException(e.getMessage());
         }
     }
     private void isExist(T id) {
@@ -156,8 +167,9 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
             ResultSet resultSet = this.queryingById(id);
             resultSet.close();
             DbUtil.dbDisconnect();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        }
+        catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
         }
     }
     public E findById(T id) {
@@ -184,7 +196,7 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
                  | NoSuchMethodException e) {
             throw new RuntimeException(e);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException(e.getMessage());
         }
     }
     public void update(E entity, T id) {
@@ -234,8 +246,10 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
             statement.executeUpdate();
             statement.close();
             DbUtil.dbDisconnect();
-        } catch (SQLException | IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
         }
     }
 
@@ -243,25 +257,24 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
         this.isExist(id);
         String idName = null;
         try {
-            var entity =  this.genericEntity.getClass();
-            idName =  entity.getAnnotation(Entity.class).pk();
+            var entity = this.genericEntity.getClass();
+            idName = entity.getAnnotation(Entity.class).pk();
 
-            String deleteQuery =   String.format("DELETE  FROM %s WHERE %s = ?",
+            String deleteQuery = String.format("DELETE  FROM %s WHERE %s = ?",
                     entity.getSimpleName(),
                     idName);
             PreparedStatement statement = DbUtil.dbConnect().prepareStatement(deleteQuery);
 
-            if(id.getClass().equals(Integer.class)) {
+            if (id.getClass().equals(Integer.class)) {
                 statement.setInt(1, (Integer) id);
             }
-            if(id.getClass().equals(String.class)) {
+            if (id.getClass().equals(String.class)) {
                 statement.setString(1, (String) id);
             }
             statement.executeUpdate();
             DbUtil.dbDisconnect();
-            System.out.println("deleted!");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+                throw new DatabaseException(e.getMessage());
         }
     }
 }

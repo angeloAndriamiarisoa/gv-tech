@@ -15,26 +15,17 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MainApp  {
+public class MainApp extends Application  {
 
-   /*@Override
+    @Override
     public void start(Stage stage) throws IOException {
         InitApplication init = new InitApplication(stage);
         init.init();
-    }*/
+    }
 
 
     public static void main(String[] args) {
-        new CustomerRepository().save(new Customer("angelo12", "phone1200D", "emial1D0012"));
-        new CustomerRepository().save(new Customer("angelo12", "phone12D", "emi1D0012"));
-        //      new CustomerRepository().update(new Customer("angelo122XXXDD", "phone12", "emial12ko"), "phone12");
-
-       System.out.println(new CustomerRepository().findById("phone12D"));
-      // System.out.println(new CustomerRepository().findAll());
-
-
-
-        return;
-       // launch();
+        new CustomerRepository().save(new Customer("angelo", "phone", "email"));
+        launch();
     }
 }

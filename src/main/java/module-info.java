@@ -7,6 +7,7 @@ module com.techimage.projectjfx {
     requires net.synedra.validatorfx;
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
+    requires org.xerial.sqlitejdbc;
 
     opens com.techimage.projectjfx to javafx.fxml;
     opens com.techimage.projectjfx.model;

@@ -47,7 +47,9 @@ public class ValidationUtil {
                        error = error.concat(
                                String.format("`%s` doit contenir au plus %d caractères\n", textValidation.label(), textValidation.maxLength()));
                    }
-                   this.errors.put(String.format("%s%s", field.getName(), suffixFieldError), error);
+                   if(!error.isEmpty()) {
+                       this.errors.put(String.format("%s%s", field.getName(), suffixFieldError), error);
+                   }
 
                } catch (IllegalAccessException e) {
                    throw new RuntimeException(e);
@@ -55,7 +57,7 @@ public class ValidationUtil {
            }
         }
 
-        if(this.errors.size() > 0) {
+        if(!this.errors.isEmpty()) {
             this.setErrorMessage();
             throw new ValidationException();
         }

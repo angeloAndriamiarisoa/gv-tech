@@ -14,7 +14,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.techimage.projectjfx.controller.forms.CustomerFormController">
+<AnchorPane fx:id="customerFormContainer" prefHeight="400.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.techimage.projectjfx.controller.forms.CustomerFormController">
    <children>
       <VBox alignment="CENTER" layoutX="14.0" layoutY="-32.0" prefHeight="378.0" prefWidth="450.0" AnchorPane.bottomAnchor="-12.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
