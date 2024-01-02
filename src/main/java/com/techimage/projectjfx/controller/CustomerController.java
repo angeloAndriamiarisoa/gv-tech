@@ -25,8 +25,6 @@ import java.util.function.Function;
 import static com.techimage.projectjfx.controller.forms.CustomerFormController.customerToEdit;
 
 public class CustomerController implements Initializable {
-
-
     @FXML
     public TableColumn<Customer, String> nameColumn;
     @FXML
@@ -47,7 +45,6 @@ public class CustomerController implements Initializable {
     private ObservableList<Customer> customerList;
 
     public static Stage dialog;
-
     private CustomerRepository customerRepository = new CustomerRepository();
 
 
@@ -56,11 +53,9 @@ public class CustomerController implements Initializable {
         fillTable(1);
         initBtnShowDialog();
         int totalItems = this.customerRepository.countAll();
-        int perPage = 5;
         com.techimage.projectjfx.controller.pagination.Pagination.setPaginationFactory(
                 pagination,
-                totalItems,
-                perPage
+                totalItems
         );
         pagination.currentPageIndexProperty().addListener((observableValue, oldValue, newValue) -> {
             fillTable((Integer) newValue + 1);
@@ -86,12 +81,11 @@ public class CustomerController implements Initializable {
             @Override
             public Object apply(Object o) {
                 customerToEdit = null;
-                CustomerController.this.fillTable(1);
+                CustomerController.this.fillTable(pagination.getCurrentPageIndex() + 1);
                 return null;
             }
         });
     }
-
     private void fillTable (Integer page) {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
@@ -119,14 +113,13 @@ public class CustomerController implements Initializable {
                         tableCustomer.getSelectionModel().select(this.getIndex());
                         Customer customer = tableCustomer.getSelectionModel().getSelectedItem();
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.setTitle("Information");
                         alert.setHeaderText("");
-                        alert.setContentText("Voulez vous vraiment supprimer ce client");
+                        alert.setContentText("Voulez vous vraiment supprimer ce client ?");
                         alert.showAndWait();
                         if(alert.getResult().getButtonData() == ButtonBar.ButtonData.OK_DONE) {
                             customerRepository.delete(customer.getPhone());
                             Toast.start("Client supprimé!", Toast.SUCCESS);
-                            fillTable(1);
+                            fillTable(pagination.getCurrentPageIndex() + 1);
                         }
 
                     }

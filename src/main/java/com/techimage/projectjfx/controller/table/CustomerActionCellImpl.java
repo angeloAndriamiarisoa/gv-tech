@@ -35,7 +35,7 @@ public class CustomerActionCellImpl extends TableCell<Customer, String> implemen
         String deleteHoverStyle = "-fx-background-color: #f64646;" +
                 "-fx-font-weight : 600";
 
-        String editIcon = "delete.png";
+        String editIcon = "edit.png";
         String deleteIcon = "delete.png";
 
         this.editButton = makeActionButton("Modifier", edit, edithover,  editIcon);

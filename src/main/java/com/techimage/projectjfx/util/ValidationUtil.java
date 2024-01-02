@@ -4,8 +4,6 @@ import com.techimage.projectjfx.annotations.TextValidation;
 import com.techimage.projectjfx.exception.ValidationException;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import org.w3c.dom.Text;
-
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -36,19 +34,31 @@ public class ValidationUtil {
                    Object value = field.get(this.instance);
                    TextField fieldInstance = (TextField) value;
                     String fieldValue = fieldInstance.getText();
-                   if(!this.testRegex(fieldValue, textValidation.regex())) {
-                       error = error.concat(textValidation.message() + "\n");
-                   }
-                   if(fieldValue.length() < textValidation.minLength()) {
-                       error = error.concat(
-                               String.format("`%s` doit contenir au moins %d caractères\n", textValidation.label(), textValidation.minLength()));
-                   }
-                   if(fieldValue.length() > textValidation.maxLength()) {
-                       error = error.concat(
-                               String.format("`%s` doit contenir au plus %d caractères\n", textValidation.label(), textValidation.maxLength()));
-                   }
+
+                    if(textValidation.required() || !fieldValue.isEmpty()) {
+                        if(!this.testRegex(fieldValue, textValidation.regex())) {
+                            error = error.concat(textValidation.message() + "\n");
+                        }
+
+                        if(fieldValue.length() < textValidation.minLength()) {
+                            error = error.concat(
+                                    String.format("`%s` doit contenir au moins %d caractères\n",
+                                            textValidation.label(), textValidation.minLength())
+                            );
+                        }
+                        if(fieldValue.length() > textValidation.maxLength()) {
+                            error = error.concat(
+                                    String.format("`%s` doit contenir au plus %d caractères\n",
+                                            textValidation.label(), textValidation.maxLength())
+                            );
+                        }
+                    }
+
                    if(!error.isEmpty()) {
-                       this.errors.put(String.format("%s%s", field.getName(), suffixFieldError), error);
+                       this.errors.put(
+                               String.format("%s%s", field.getName(), suffixFieldError),
+                               error
+                       );
                    }
 
                } catch (IllegalAccessException e) {

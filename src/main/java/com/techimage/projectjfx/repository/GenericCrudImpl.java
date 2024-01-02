@@ -1,6 +1,7 @@
 package com.techimage.projectjfx.repository;
 
 import com.techimage.projectjfx.annotations.entity.Entity;
+import com.techimage.projectjfx.controller.pagination.Pagination;
 import com.techimage.projectjfx.exception.DatabaseException;
 import com.techimage.projectjfx.exception.NotFoundEntity;
 import com.techimage.projectjfx.util.DbUtil;
@@ -109,16 +110,11 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
         catch (SQLException e) {
             throw new DatabaseException(e.getErrorCode());
         }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-
 
     }
     public List<E> findAll(Integer page) {
-        int limit = 5;
-        int offset = (page - 1)*limit;
+        int limit = new Pagination().getLIMIT();
+        int offset = (page - 1)* limit;
         List<E> list = new ArrayList<>();
         Statement statements = null;
         E entity = null;
@@ -278,7 +274,6 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
             throw new DatabaseException(e.getErrorCode());
         }
     }
-
     public void delete(T id) {
         this.isExist(id);
         String idName = null;

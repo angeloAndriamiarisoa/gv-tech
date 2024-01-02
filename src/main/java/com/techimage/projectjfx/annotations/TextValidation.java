@@ -14,4 +14,5 @@ public @interface TextValidation {
     int minLength() default 0;
     int maxLength() default 1000;
     String message() default "La valeur du champs est incorrecte";
+    boolean required() default true;
 }

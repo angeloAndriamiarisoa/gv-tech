@@ -2,11 +2,12 @@ package com.techimage.projectjfx.controller.pagination;
 
 public class Pagination {
 
-    public static void setPaginationFactory (javafx.scene.control.Pagination pagination,
-                                             Integer totalItems,
-                                             Integer perPage) {
+    private static final  Integer LIMIT = 15;
+
+    public static void setPaginationFactory(javafx.scene.control.Pagination pagination,
+                                            Integer totalItems) {
         if(totalItems > 0) {
-            Integer totalPage = Math.ceilDiv(totalItems, perPage);
+            Integer totalPage = Math.ceilDiv(totalItems, LIMIT);
             if(totalPage <= 1) {
                 pagination.setVisible(false);
                 return;
@@ -18,5 +19,8 @@ public class Pagination {
         }
         pagination.setVisible(false);
 
+    }
+    public Integer getLIMIT() {
+        return LIMIT;
     }
 }

@@ -41,7 +41,8 @@ public class CustomerFormController implements Initializable {
     @FXML
     @TextValidation(label = "Email",
             message = "La valeur entrée ne correspond pas au norme d'adresse email",
-            regex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
+            regex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+            required = false)
     public TextField emailTxt;
     @FXML
     public Button saveBtn;
