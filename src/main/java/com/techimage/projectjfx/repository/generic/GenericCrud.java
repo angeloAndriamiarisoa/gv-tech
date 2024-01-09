@@ -1,4 +1,4 @@
-package com.techimage.projectjfx.repository;
+package com.techimage.projectjfx.repository.generic;
 
 import java.util.List;
 

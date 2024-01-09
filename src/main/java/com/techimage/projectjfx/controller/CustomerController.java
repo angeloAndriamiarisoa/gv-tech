@@ -1,6 +1,7 @@
 package com.techimage.projectjfx.controller;
 
 import com.techimage.projectjfx.controller.dialog.Dialog;
+import com.techimage.projectjfx.controller.dialog.OwnAlert;
 import com.techimage.projectjfx.controller.table.CustomerActionCellImpl;
 import com.techimage.projectjfx.controller.toast.Toast;
 import com.techimage.projectjfx.model.Customer;
@@ -11,11 +12,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
@@ -74,10 +73,8 @@ public class CustomerController implements Initializable {
         });
     }
     private void showDialog() throws IOException {
-
         AnchorPane content = FXMLLoader.load(ResourceUtil.getViewFormUrl("customer-form.fxml"));
-
-        Dialog.showDialog("ajout", content, new Function() {
+        Dialog.showDialog("Client", content, new Function() {
             @Override
             public Object apply(Object o) {
                 customerToEdit = null;
@@ -112,11 +109,8 @@ public class CustomerController implements Initializable {
                     public void delete() {
                         tableCustomer.getSelectionModel().select(this.getIndex());
                         Customer customer = tableCustomer.getSelectionModel().getSelectedItem();
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.setHeaderText("");
-                        alert.setContentText("Voulez vous vraiment supprimer ce client ?");
-                        alert.showAndWait();
-                        if(alert.getResult().getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+                        ButtonBar.ButtonData result =  OwnAlert.optionalAlert("Voulez vous vraiment supprimer ce client ?");
+                        if(result == ButtonBar.ButtonData.OK_DONE) {
                             customerRepository.delete(customer.getPhone());
                             Toast.start("Client supprimé!", Toast.SUCCESS);
                             fillTable(pagination.getCurrentPageIndex() + 1);
@@ -129,4 +123,5 @@ public class CustomerController implements Initializable {
             }
         });
     }
+
 }

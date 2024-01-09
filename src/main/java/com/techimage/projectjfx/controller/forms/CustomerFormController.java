@@ -58,7 +58,7 @@ public class CustomerFormController implements Initializable {
 
     @FXML
     public Label title;
-    private CustomerFormController addCustomerController = this;
+    private CustomerFormController _this = this;
     private CustomerRepository customerRepository = new CustomerRepository();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -66,14 +66,7 @@ public class CustomerFormController implements Initializable {
         EventBtn eventBtn = new EventBtn() {
             @Override
             public void save() {
-               Alert alert = new Alert(Alert.AlertType.INFORMATION);
-               alert.setTitle("Information");
-               alert.setHeaderText("");
-               alert.setContentText("Ajout");
-
-               alert.show();
-               customerToEdit = null;
-
+                _this.save();
             }
 
             @Override
@@ -92,12 +85,12 @@ public class CustomerFormController implements Initializable {
         });
 
         this.saveBtn.setOnMouseClicked(mouseEvent -> {
-            this.save();
+            eventBtn.save();
         });
     }
 
     private void save () {
-        ValidationUtil validation = new ValidationUtil(addCustomerController);
+        ValidationUtil validation = new ValidationUtil(_this);
         try {
            validation.textValidation();
             Customer customer = new Customer();

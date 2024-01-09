@@ -1,6 +1,8 @@
 package com.techimage.projectjfx.controller.table;
 
+import com.techimage.projectjfx.InitApplication;
 import com.techimage.projectjfx.model.Customer;
+import com.techimage.projectjfx.model.Product;
 import com.techimage.projectjfx.util.ResourceUtil;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
@@ -10,23 +12,29 @@ import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 
-public class CustomerActionCellImpl extends TableCell<Customer, String> implements ActionCellEvent {
+public class ProductActionCellImpl extends TableCell<Product, String>
+        implements ActionCellEvent {
     private HBox actionCell;
 
-    private CustomerActionCellImpl _this = this;
+    private ProductActionCellImpl _this = this;
 
-    public CustomerActionCellImpl() throws IOException {
+    public ProductActionCellImpl()  {
+        ActionCellImpl actionsCell = null;
+        try {
+            actionsCell = new ActionCellImpl() {
+                @Override
+                public void deleteAction() {
+                    _this.delete();
+                }
 
-        ActionCellImpl actionsCell = new ActionCellImpl() {
-            @Override
-            public void deleteAction() {
-                _this.delete();
-            }
-            @Override
-            public void editAction() {
-                _this.edit();
-            }
-        };
+                @Override
+                public void editAction() {
+                    _this.edit();
+                }
+            };
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         this.actionCell = actionsCell.getActionCell();
         setGraphic(this.actionCell);
     }
@@ -45,7 +53,6 @@ public class CustomerActionCellImpl extends TableCell<Customer, String> implemen
     public void edit() {
 
     }
-
     @Override
     public void delete() {
 

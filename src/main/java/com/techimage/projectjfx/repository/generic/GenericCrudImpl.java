@@ -1,4 +1,4 @@
-package com.techimage.projectjfx.repository;
+package com.techimage.projectjfx.repository.generic;
 
 import com.techimage.projectjfx.annotations.entity.Entity;
 import com.techimage.projectjfx.controller.pagination.Pagination;
@@ -91,6 +91,10 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
 
                 if(method.getName().contains("get")) {
                     index++;
+                    System.out.println(method.getName());
+                    if(method.getReturnType().equals(Boolean.class)) {
+                        statement.setString(index,  method.invoke(entity).toString());
+                    }
                     if(method.getReturnType().equals(Integer.class)) {
                         statement.setInt(index, (Integer) method.invoke(entity));
                     }
@@ -108,7 +112,9 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
             throw new RuntimeException(e);
         }
         catch (SQLException e) {
-            throw new DatabaseException(e.getErrorCode());
+            throw new RuntimeException(e);
+
+           // throw new DatabaseException(e.getErrorCode());
         }
 
     }
@@ -132,15 +138,33 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
                 Method[] methods =  entity.getClass().getDeclaredMethods();
                 for (Method method : methods) {
                     if(method.getName().contains("set")) {
+
+                        if(Arrays.stream(method.getParameterTypes()).toList().get(0).equals(Boolean.class)){
+;
+
+                            Boolean is = Boolean.parseBoolean(resultSet.getString(
+                                    method.getName().toLowerCase().substring(3)));
+                            method.invoke(entity,is);
+                            continue;
+
+                        }
+                        if(Arrays.stream(method.getParameterTypes()).toList().get(0).equals(Integer.class)){
+
+                            Integer is = resultSet.getInt(
+                                    method.getName().toLowerCase().substring(3));
+                            method.invoke(entity,is);
+                            continue;
+
+                        }
                         method.invoke(entity, resultSet.getObject(
                                 method.getName().toLowerCase().substring(3)));
                     }
                 }
+
                 list.add(entity);
 
             }
             DbUtil.dbDisconnect();
-            System.out.println(list);
             return list;
 
         } catch ( IllegalAccessException
@@ -241,6 +265,7 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
         System.out.println(updateQuery);
 
         int index = 0;
+        System.out.println(entity);
         try {
             Method pkGetMethod = null;
             PreparedStatement statement = Objects.requireNonNull(DbUtil.dbConnect()).prepareStatement(updateQuery);
@@ -255,6 +280,9 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
                     }
                     if(method.getReturnType().equals(String.class)) {
                         statement.setString(index, (String) method.invoke(entity));
+                    }
+                    if(method.getReturnType().equals(Boolean.class)) {
+                        statement.setString(index,  method.invoke(entity).toString());
                     }
                 }
             }
@@ -271,7 +299,9 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         } catch (SQLException e) {
-            throw new DatabaseException(e.getErrorCode());
+            throw new RuntimeException(e);
+
+          //  throw new DatabaseException(e.getErrorCode());
         }
     }
     public void delete(T id) {

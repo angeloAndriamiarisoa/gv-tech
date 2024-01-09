@@ -39,8 +39,8 @@ public class NavigationBar {
 
     @FXML
     public void toProduct() throws IOException {
-        BorderPane customer =  FXMLLoader.load(ResourceUtil.getViewUrl("customer.fxml"));
-        this.navigate(this.customerItem, customer);
+        BorderPane product =  FXMLLoader.load(ResourceUtil.getViewUrl("product.fxml"));
+        this.navigate(this.productItem, product);
     }
 
     private void navigate (Label navItem, BorderPane destination) {

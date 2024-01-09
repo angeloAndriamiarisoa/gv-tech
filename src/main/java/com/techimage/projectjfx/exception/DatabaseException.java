@@ -24,5 +24,6 @@ public class DatabaseException extends RuntimeException{
         alert.setHeaderText("");
         alert.setContentText(content);
         alert.show();
+
     }
 }
