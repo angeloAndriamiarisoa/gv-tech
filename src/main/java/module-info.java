@@ -8,6 +8,9 @@ module com.techimage.projectjfx {
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
     requires org.xerial.sqlitejdbc;
+    requires kernel;
+    requires layout;
+    requires io;
 
     opens com.techimage.projectjfx to javafx.fxml;
     opens com.techimage.projectjfx.model;

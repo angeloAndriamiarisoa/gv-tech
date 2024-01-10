@@ -26,6 +26,9 @@ public class NavigationBar {
     public Label productItem;
 
     @FXML
+    public Label saleItem;
+
+    @FXML
     public void toDashboard() throws IOException {
         BorderPane dashboard =  FXMLLoader.load(ResourceUtil.getViewUrl("dashboard.fxml"));
         this.navigate(this.dashboardItem, dashboard);
@@ -41,6 +44,12 @@ public class NavigationBar {
     public void toProduct() throws IOException {
         BorderPane product =  FXMLLoader.load(ResourceUtil.getViewUrl("product.fxml"));
         this.navigate(this.productItem, product);
+    }
+
+    @FXML
+    public void toSale()throws IOException {
+        BorderPane product =  FXMLLoader.load(ResourceUtil.getViewUrl("sale.fxml"));
+        this.navigate(this.saleItem, product);
     }
 
     private void navigate (Label navItem, BorderPane destination) {
