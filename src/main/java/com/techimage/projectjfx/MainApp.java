@@ -15,8 +15,10 @@ import com.itextpdf.layout.properties.TextAlignment;
 import com.techimage.projectjfx.controller.SplitBody;
 import com.techimage.projectjfx.exception.DatabaseException;
 import com.techimage.projectjfx.model.Customer;
+import com.techimage.projectjfx.model.Order;
 import com.techimage.projectjfx.model.Product;
 import com.techimage.projectjfx.repository.CustomerRepository;
+import com.techimage.projectjfx.repository.OrderRepository;
 import com.techimage.projectjfx.repository.ProductRepository;
 import com.techimage.projectjfx.util.DbUtil;
 import com.techimage.projectjfx.util.ResourceUtil;
@@ -67,12 +69,12 @@ public class MainApp extends Application  {
                 product.setName("product" + i);
                 product.setUnitPrice(phone*i);
                 product.setUnit("piece");
+                product.setQuantity(phone*i);
                 new ProductRepository().save(product);
             }
         }
     }
     public static void main(String[] args)  {
-      //  launch();
-
+     launch();
     }
 }

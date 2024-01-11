@@ -66,14 +66,14 @@
                   <Separator prefHeight="37.0" prefWidth="200.0" />
                   <AnchorPane prefHeight="40.0" prefWidth="216.0">
                      <children>
-                        <Label fx:id="purchageItem" contentDisplay="TOP" ellipsisString="Produit" onMouseClicked="#toProduct" prefHeight="40.0" prefWidth="200.0" styleClass="nav-item" text="Achat">
+<!--<Label fx:id="purchageItem" contentDisplay="TOP" ellipsisString="Produit" onMouseClicked="#toProduct" prefHeight="40.0" prefWidth="200.0" styleClass="nav-item" text="Achat">
                            <font>
                               <Font size="16.0" />
                            </font>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
-                        </Label>
+                        </Label>-->
                      </children>
                   </AnchorPane>
                   <AnchorPane prefHeight="40.0" prefWidth="216.0">

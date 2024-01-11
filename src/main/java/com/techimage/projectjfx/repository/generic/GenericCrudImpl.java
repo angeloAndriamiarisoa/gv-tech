@@ -51,7 +51,7 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
     @Override
     public Integer countAll() {
         Integer total = 0;
-        String countQuery = String.format("SELECT COUNT(%s) FROM %s",
+        String countQuery = String.format("SELECT COUNT(%s) FROM `%s`",
                 this.genericEntity.getClass().getAnnotation(Entity.class).pk(),
                 this.genericEntity.getClass().getSimpleName()
                 );
@@ -79,10 +79,11 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
                 values.append(",");
             }
         }
-        String insert = String.format("INSERT INTO %s (%s) VALUES (%s)",
+        String insert = String.format("INSERT INTO `%s` (%s) VALUES (%s)",
                 entity.getClass().getSimpleName(),
                 columnNames.toString(),
                 values.toString());
+        System.out.println(insert);
 
         int index = 0;
         try {
@@ -128,7 +129,7 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
             entity = (E) this.genericEntity.getClass().getDeclaredConstructor().newInstance();
             statements = DbUtil.dbConnect().createStatement();
             ResultSet resultSet =  statements.executeQuery(String.format(
-                    "SELECT * from %s LIMIT %s OFFSET %s ",
+                    "SELECT * from `%s` LIMIT %s OFFSET %s ",
                     entity.getClass().getSimpleName(),
                     limit,
                     offset
@@ -185,9 +186,10 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
         try {
             var entity = this.genericEntity.getClass();
             idName = entity.getAnnotation(Entity.class).pk();
-            String findQuery = String.format("SELECT * FROM %s WHERE %s = ?",
+            String findQuery = String.format("SELECT * FROM `%s` WHERE %s = ?",
                     entity.getSimpleName(),
                     idName);
+            System.out.println(findQuery);
             PreparedStatement statement = DbUtil.dbConnect().prepareStatement(findQuery);
 
             if (id.getClass().equals(Integer.class)) {
@@ -227,6 +229,24 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
                     Method[] methods = entity.getClass().getDeclaredMethods();
                     for (Method method : methods) {
                         if (method.getName().contains("set")) {
+
+                            if(Arrays.stream(method.getParameterTypes()).toList().get(0).equals(Boolean.class)){
+                                ;
+
+                                Boolean is = Boolean.parseBoolean(resultSet.getString(
+                                        method.getName().toLowerCase().substring(3)));
+                                method.invoke(entity,is);
+                                continue;
+
+                            }
+                            if(Arrays.stream(method.getParameterTypes()).toList().get(0).equals(Integer.class)){
+
+                                Integer is = resultSet.getInt(
+                                        method.getName().toLowerCase().substring(3));
+                                method.invoke(entity,is);
+                                continue;
+
+                            }
                             method.invoke(entity, resultSet.getObject(
                                     method.getName().toLowerCase().substring(3)));
                         }
@@ -257,7 +277,7 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
             }
         }
         String idName = entity.getClass().getAnnotation(Entity.class).pk();
-        String updateQuery = String.format("UPDATE %s SET %s WHERE %s = ?",
+        String updateQuery = String.format("UPDATE `%s` SET %s WHERE %s = ?",
                 entity.getClass().getSimpleName(),
                 columnsToChange.toString(),
                 idName);
@@ -311,7 +331,7 @@ public  class GenericCrudImpl<E, T> implements GenericCrud<E, T> {
             var entity = this.genericEntity.getClass();
             idName = entity.getAnnotation(Entity.class).pk();
 
-            String deleteQuery = String.format("DELETE  FROM %s WHERE %s = ?",
+            String deleteQuery = String.format("DELETE  FROM `%s` WHERE %s = ?",
                     entity.getSimpleName(),
                     idName);
             PreparedStatement statement = DbUtil.dbConnect().prepareStatement(deleteQuery);
