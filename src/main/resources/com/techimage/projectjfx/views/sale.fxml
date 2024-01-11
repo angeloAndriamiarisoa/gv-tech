@@ -60,10 +60,13 @@
                                                                         <TextField GridPane.columnIndex="1" />
                                                                      </children>
                                                                   </GridPane>
-                                                                  <TableView prefHeight="283.0" prefWidth="477.0">
+                                                                  <TableView fx:id="productTableView" prefHeight="283.0" prefWidth="477.0">
                                                                     <columns>
-                                                                      <TableColumn prefWidth="75.0" text="C1" />
-                                                                      <TableColumn prefWidth="75.0" text="C2" />
+                                                                      <TableColumn fx:id="idColumn" prefWidth="75.0" text="Id" />
+                                                                      <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Nom" />
+                                                                        <TableColumn fx:id="unitColumn" prefWidth="75.0" text="Unité" />
+                                                                        <TableColumn fx:id="unitPriceColumn" prefWidth="75.0" text="Prix Unitaire" />
+                                                                        <TableColumn fx:id="actionColumln" prefWidth="96.0" text="Action" />
                                                                     </columns>
                                                                   </TableView>
                                                                </children>
