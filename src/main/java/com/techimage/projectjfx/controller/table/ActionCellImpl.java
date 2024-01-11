@@ -13,6 +13,7 @@ abstract class ActionCellImpl
 
     private Button editButton;
     private Button deleteButton;
+    private Button purchageButton;
     private HBox actionCell;
 
     public HBox getActionCell() {
@@ -41,11 +42,12 @@ abstract class ActionCellImpl
 
         String editIcon = "edit.png";
         String deleteIcon = "delete.png";
+        String addPurchage = "warning.png";
 
-        this.editButton = makeActionButton("Modifier", edit, edithover,  editIcon);
-        this.deleteButton = makeActionButton("Supprimer", delete, deleteHover,  deleteIcon);
-
-        actionCell =new HBox(editButton, deleteButton);
+        this.editButton = makeActionButton("", edit, edithover,  editIcon);
+        this.deleteButton = makeActionButton("", delete, deleteHover,  deleteIcon);
+        this.purchageButton = makeActionButton("", edit, edithover,  addPurchage);
+        actionCell =new HBox(purchageButton, editButton, deleteButton);
         actionCell.setSpacing(5.0);
    //     setGraphic(this.actionCell);
 
@@ -55,6 +57,10 @@ abstract class ActionCellImpl
 
         this.deleteButton.setOnMouseClicked(mouseEvent -> {
             this.deleteAction();
+        });
+
+        this.purchageButton.setOnMouseClicked(mouseEvent -> {
+            this.addPurchase();
         });
     }
 
@@ -95,6 +101,10 @@ abstract class ActionCellImpl
     }
 
     public void deleteAction() {
+
+    }
+
+    public void addPurchase() {
 
     }
 

@@ -15,7 +15,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="productFormContainer" prefHeight="400.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.techimage.projectjfx.controller.forms.ProductFormController">
+<AnchorPane fx:id="productFormContainer" prefHeight="400.0" prefWidth="529.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.techimage.projectjfx.controller.forms.PurchaseFormController">
    <children>
       <VBox alignment="CENTER" layoutX="14.0" layoutY="-32.0" prefHeight="451.0" prefWidth="450.0" AnchorPane.bottomAnchor="-51.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -49,6 +49,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <VBox.margin>
@@ -100,15 +101,22 @@
                         </Label>
                      </children>
                   </VBox>
-                  <Label fx:id="quantityLabel" text="Quantité" GridPane.rowIndex="3" />
-                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <Label text="Quantité" GridPane.rowIndex="4" />
+                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <children>
                         <TextField fx:id="quantityTxt" />
-                        <Label fx:id="quantityTextError" textFill="#f81919">
+                        <Label fx:id="quantityTxtError" textFill="#f81919">
                            <font>
                               <Font size="10.0" />
                            </font>
                         </Label>
+                     </children>
+                  </VBox>
+                  <Label text="Quantité actuelle" GridPane.rowIndex="3" />
+                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <children>
+                        <TextField fx:id="nowQuantityTxt" />
+                        <Label />
                      </children>
                   </VBox>
                </children>

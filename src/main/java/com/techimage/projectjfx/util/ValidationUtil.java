@@ -2,6 +2,7 @@ package com.techimage.projectjfx.util;
 
 import com.techimage.projectjfx.annotations.TextValidation;
 import com.techimage.projectjfx.exception.ValidationException;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import java.lang.reflect.Field;
@@ -30,10 +31,25 @@ public class ValidationUtil {
            TextValidation textValidation =  field.getAnnotation(TextValidation.class);
            if(textValidation != null) {
                field.setAccessible(true);
+
                try {
                    Object value = field.get(this.instance);
-                   TextField fieldInstance = (TextField) value;
-                    String fieldValue = fieldInstance.getText();
+                   String fieldValue = "";
+                   System.out.println(value.getClass());
+                   if(value.getClass().equals(ChoiceBox.class)) {
+                       ChoiceBox<String> fieldInstance = (ChoiceBox<String>) value;
+                       fieldValue = fieldInstance.getSelectionModel().getSelectedItem();
+                       if(fieldValue == null) {
+                           fieldValue = "";
+                       }
+
+                   }
+                   else {
+                       TextField fieldInstance = (TextField) value;
+                       fieldValue = fieldInstance.getText();
+                   }
+
+
 
                     if(textValidation.required() || !fieldValue.isEmpty()) {
                         if(!this.testRegex(fieldValue, textValidation.regex())) {
@@ -84,7 +100,9 @@ public class ValidationUtil {
         Field [] fields = this.aClass.getDeclaredFields();
         for(Field field : fields) {
             if(field.getClass().equals(Label.class)) {
+                System.out.println(field.getName());
                 Label label = (Label) field.get(this.instance);
+
                 label.setText("");
             }
         }
@@ -95,6 +113,7 @@ public class ValidationUtil {
             Label labelError = (Label) value;
             labelError.setText(this.errors.get(key));
         }
+        this.errors.clear();
     }
 
 

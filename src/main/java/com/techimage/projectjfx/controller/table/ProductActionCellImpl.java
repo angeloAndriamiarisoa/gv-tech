@@ -31,6 +31,11 @@ public class ProductActionCellImpl extends TableCell<Product, String>
                 public void editAction() {
                     _this.edit();
                 }
+
+                @Override
+                public void addPurchase() {
+                    _this.purchase();
+                }
             };
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -55,6 +60,10 @@ public class ProductActionCellImpl extends TableCell<Product, String>
     }
     @Override
     public void delete() {
+
+    }
+
+    public void purchase () {
 
     }
 }

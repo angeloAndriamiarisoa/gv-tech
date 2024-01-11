@@ -40,18 +40,22 @@ public class ProductFormController implements Initializable {
 
     @FXML
     @TextValidation(label = "Unité",
-            message = "Veuillez à choisir une unité de produit correcte",
+            message = "Veuillez à choisir une unité pour le produit",
             regex = "^[a-zA-ZéèêÉÈÊ'0-9 ]+$")
     public ChoiceBox unitTxt;
     @FXML
     @TextValidation(label = "Prix unitaire",
-            message = "Veuillez à entrer un valeur de nom produit correcte",
+            message = "Le prix unitaire doit être en chiffre",
             regex = "^[0-9]+$")
     public TextField unitPriceTxt;
-
+    @FXML public Label unitTxtError;
+    @FXML public Label unitPriceTxtError;
+    @FXML public Label nameTxtError;
 
     @FXML
     public TextField quantityTxt;
+
+    @FXML public Label quantityLabel;
 
     @FXML
     public Button saveBtn;
@@ -99,18 +103,26 @@ public class ProductFormController implements Initializable {
     private void save () {
         ValidationUtil validation = new ValidationUtil(_this);
         try {
-          //  validation.textValidation();
+            try {
+                validation.textValidation();
+            } catch (NoSuchFieldException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
             Product product = new Product();
-            product.setId(nameTxt.getText(1,5));
             product.setName(nameTxt.getText());
             product.setUnit(unitTxt.getValue().toString());
             product.setUnitPrice(Integer.parseInt(unitPriceTxt.getText()));
             if(productToEdit == null) {
+                product.setId(nameTxt.getText(1,5));
                 this.productRepository.save(product);
                 productToEdit = null;
                 Toast.start("Ajout produit fini!", Toast.SUCCESS);
             }
             else {
+                product.setId(productToEdit.getId());
+
                 this.productRepository.update(product, productToEdit.getId());
                 productToEdit = null;
                 Toast.start("Modification client fini!", Toast.SUCCESS);
@@ -126,13 +138,16 @@ public class ProductFormController implements Initializable {
     }
 
     public void setTextFields () {
+        quantityLabel.setVisible(false);
         if(productToEdit != null) {
             this.title.setText("Modifier un client : " + productToEdit.getName());
             nameTxt.setText(productToEdit.getName());
             unitTxt.getSelectionModel().select(productToEdit.getUnit());
             unitPriceTxt.setText(productToEdit.getUnitPrice().toString());
             quantityTxt.setText(productToEdit.getQuantity().toString());
+            quantityLabel.setVisible(true);
             quantityTxt.setVisible(true);
+            quantityTxt.setEditable(false);
         }
     }
 }
