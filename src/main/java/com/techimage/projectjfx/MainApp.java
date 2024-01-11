@@ -44,8 +44,8 @@ public class MainApp extends Application  {
 
     @Override
     public void start(Stage stage) throws IOException {
-       InitApplication init = new InitApplication(stage);
-     init.init();
+       //InitApplication init = new InitApplication(stage);
+    // init.init();
 
       if(new CustomerRepository().countAll() == 0) {
             Integer phone = 0341010000;
@@ -72,7 +72,7 @@ public class MainApp extends Application  {
         }
     }
     public static void main(String[] args)  {
-        launch();
+      //  launch();
 
     }
 }
