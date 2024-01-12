@@ -18,6 +18,6 @@ module com.techimage.projectjfx {
     exports com.techimage.projectjfx;
     exports com.techimage.projectjfx.controller;
     exports com.techimage.projectjfx.controller.forms;
-    opens com.techimage.projectjfx.controller to javafx.fxml;
+  //  opens com.techimage.projectjfx.controller to javafx.fxml;
 
 }

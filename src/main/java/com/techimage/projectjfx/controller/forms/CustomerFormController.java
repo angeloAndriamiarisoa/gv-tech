@@ -92,7 +92,7 @@ public class CustomerFormController implements Initializable {
     private void save () {
         ValidationUtil validation = new ValidationUtil(_this);
         try {
-           validation.textValidation();
+            validation.textValidation();
             Customer customer = new Customer();
             customer.setEmail(emailTxt.getText());
             customer.setName(nameTxt.getText());

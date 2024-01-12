@@ -6,6 +6,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,10 +19,6 @@ public class ValidationUtil {
         this.aClass = instance.getClass();
     }
     private final HashMap<String, String> errors = new HashMap<>();
-
-    public HashMap<String, String> getErrors () {
-        return this.errors;
-    }
     public void textValidation () throws NoSuchFieldException, IllegalAccessException {
         String suffixFieldError = "Error";
         String error = "";
@@ -98,14 +95,17 @@ public class ValidationUtil {
 
     private void setErrorMessage () throws NoSuchFieldException, IllegalAccessException {
         Field [] fields = this.aClass.getDeclaredFields();
-        for(Field field : fields) {
-            if(field.getClass().equals(Label.class)) {
-                System.out.println(field.getName());
-                Label label = (Label) field.get(this.instance);
-
-                label.setText("");
-            }
-        }
+        Arrays.stream(fields)
+                .filter(field -> field.getName().contains("Error"))
+                .toList().forEach(field -> {
+                    Label label = null;
+                    try {
+                        label = (Label) field.get(this.instance);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                    label.setText("");
+                });
         for(String key : this.errors.keySet()) {
             Field field = this.aClass.getField(key);
             field.setAccessible(true);
