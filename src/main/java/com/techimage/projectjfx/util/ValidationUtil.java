@@ -12,8 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ValidationUtil {
-    private Class<?> aClass;
-    private Object instance;
+    private final Class<?> aClass;
+    private final Object instance;
     public ValidationUtil(Object instance) {
         this.instance = instance;
         this.aClass = instance.getClass();
@@ -21,69 +21,67 @@ public class ValidationUtil {
     private final HashMap<String, String> errors = new HashMap<>();
     public void textValidation () throws NoSuchFieldException, IllegalAccessException {
         String suffixFieldError = "Error";
-        String error = "";
         Field [] fields = this.aClass.getDeclaredFields();
-        for (Field field: fields) {
-            error = "";
-           TextValidation textValidation =  field.getAnnotation(TextValidation.class);
-           if(textValidation != null) {
-               field.setAccessible(true);
 
-               try {
-                   Object value = field.get(this.instance);
-                   String fieldValue = "";
-                   System.out.println(value.getClass());
-                   if(value.getClass().equals(ChoiceBox.class)) {
-                       ChoiceBox<String> fieldInstance = (ChoiceBox<String>) value;
-                       fieldValue = fieldInstance.getSelectionModel().getSelectedItem();
-                       if(fieldValue == null) {
-                           fieldValue = "";
-                       }
+        Arrays.stream(fields)
+                .filter(field -> field.getAnnotation(TextValidation.class) != null)
+                .forEach(field -> {
+                    String error = "";
+                    field.setAccessible(true);
+                    TextValidation textValidation =  field.getAnnotation(TextValidation.class);
+                    try {
+                        String fieldValue = getFieldValue(field);
+                        if(textValidation.required() || !fieldValue.isEmpty()) {
+                            if(!this.testRegex(fieldValue, textValidation.regex())) {
+                                error = error.concat(textValidation.message() + "\n");
 
-                   }
-                   else {
-                       TextField fieldInstance = (TextField) value;
-                       fieldValue = fieldInstance.getText();
-                   }
-
-
-
-                    if(textValidation.required() || !fieldValue.isEmpty()) {
-                        if(!this.testRegex(fieldValue, textValidation.regex())) {
-                            error = error.concat(textValidation.message() + "\n");
+                            }
+                            if(fieldValue.length() < textValidation.minLength()) {
+                                error = error.concat(
+                                        String.format("Le champs %s doit contenir au moins %d caractères\n",
+                                                textValidation.label(), textValidation.minLength())
+                                );
+                            }
+                            if(fieldValue.length() > textValidation.maxLength()) {
+                                error = error.concat(
+                                        String.format("Le champs %s doit contenir au plus %d caractères\n",
+                                                textValidation.label(), textValidation.maxLength())
+                                );
+                            }
                         }
 
-                        if(fieldValue.length() < textValidation.minLength()) {
-                            error = error.concat(
-                                    String.format("`%s` doit contenir au moins %d caractères\n",
-                                            textValidation.label(), textValidation.minLength())
+                        if(!error.isEmpty()) {
+                            this.errors.put(
+                                    String.format("%s%s", field.getName(), suffixFieldError),
+                                    error
                             );
                         }
-                        if(fieldValue.length() > textValidation.maxLength()) {
-                            error = error.concat(
-                                    String.format("`%s` doit contenir au plus %d caractères\n",
-                                            textValidation.label(), textValidation.maxLength())
-                            );
-                        }
+
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
                     }
-
-                   if(!error.isEmpty()) {
-                       this.errors.put(
-                               String.format("%s%s", field.getName(), suffixFieldError),
-                               error
-                       );
-                   }
-
-               } catch (IllegalAccessException e) {
-                   throw new RuntimeException(e);
-               }
-           }
-        }
-
+                });
         if(!this.errors.isEmpty()) {
             this.setErrorMessage();
             throw new ValidationException();
         }
+    }
+
+    private String getFieldValue(Field field) throws IllegalAccessException {
+        Object value = field.get(this.instance);
+        String fieldValue;
+        if(value.getClass().equals(ChoiceBox.class)) {
+            ChoiceBox<String> fieldInstance = (ChoiceBox<String>) value;
+            fieldValue = fieldInstance.getSelectionModel().getSelectedItem();
+            if(fieldValue == null) {
+                fieldValue = "";
+            }
+        }
+        else {
+            TextField fieldInstance = (TextField) value;
+            fieldValue = fieldInstance.getText();
+        }
+        return fieldValue;
     }
 
 
@@ -98,7 +96,7 @@ public class ValidationUtil {
         Arrays.stream(fields)
                 .filter(field -> field.getName().contains("Error"))
                 .toList().forEach(field -> {
-                    Label label = null;
+                    Label label;
                     try {
                         label = (Label) field.get(this.instance);
                     } catch (IllegalAccessException e) {

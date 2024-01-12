@@ -1,15 +1,12 @@
 package com.techimage.projectjfx;
 
-import com.techimage.projectjfx.controller.RootApp;
-import com.techimage.projectjfx.interfaces.InitApplicationInterface;
+import com.techimage.projectjfx.util.ResourceUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,8 +15,10 @@ public class InitApplication  {
     public static Stage primaryStage;
     private BorderPane rootContainer;
     public InitApplication  (Stage stage) {
-        Application.setUserAgentStylesheet(MainApp.class.getResource("assets/css/primer-light.css").toExternalForm());
-        this.primaryStage = stage;
+        Application.setUserAgentStylesheet(
+                MainApp.class.getResource("assets/css/primer-light.css")
+                .toExternalForm());
+        primaryStage = stage;
 
     }
 
@@ -28,8 +27,8 @@ public class InitApplication  {
                 .getResource("assets/icon/techimage.jpg")
                 .toExternalForm());
 
-        this.primaryStage.setTitle("TechStock");
-        this.primaryStage.getIcons().add(icon);
+        primaryStage.setTitle("TechStock");
+        primaryStage.getIcons().add(icon);
         this.initRootContainers();
     }
 
@@ -47,16 +46,17 @@ public class InitApplication  {
 
             splitPane.getItems().add(navigation);
             BorderPane body = initBody();
-            body.setMinWidth(this.primaryStage.getWidth() - navigation.getWidth());
+            body.setMinWidth(primaryStage.getWidth() - navigation.getWidth());
             splitPane.getItems().add(body);
 
             Scene scene = new Scene(this.rootContainer);
             scene.getStylesheets().add(css);
 
-            this.primaryStage.setScene(scene);
-            this.primaryStage.setMinWidth(1000.0);
-            this.primaryStage.setMinHeight(500.0);
-            this.primaryStage.show();
+
+            primaryStage.setScene(scene);
+            primaryStage.setMinWidth(1000.0);
+            primaryStage.setMinHeight(500.0);
+            primaryStage.show();
         }
         catch (IOException exception) {
             System.out.println(exception.getMessage());
@@ -68,8 +68,7 @@ public class InitApplication  {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class
                     .getResource("views/layout/navigation-bar.fxml"));
-            BorderPane pane = loader.load();
-            return   pane;
+            return loader.load();
         }
         catch (IOException exception) {
             System.out.println(exception.getMessage());
@@ -80,9 +79,7 @@ public class InitApplication  {
 
     private BorderPane initBody () {
         try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("views/layout/body.fxml"));
-            return loader.load();
+            return FXMLLoader.load(ResourceUtil.getViewUrl("dashboard.fxml"));
         }
         catch (IOException exception) {
             System.out.println(exception.getMessage());
