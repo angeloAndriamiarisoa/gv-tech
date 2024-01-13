@@ -122,7 +122,7 @@ public class ProductFormController implements Initializable {
             }
             else {
                 product.setId(productToEdit.getId());
-
+                product.setQuantity(productToEdit.getQuantity());
                 this.productRepository.update(product, productToEdit.getId());
                 productToEdit = null;
                 Toast.start("Modification client fini!", Toast.SUCCESS);

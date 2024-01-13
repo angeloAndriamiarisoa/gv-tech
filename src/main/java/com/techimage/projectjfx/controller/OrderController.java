@@ -113,6 +113,7 @@ public class OrderController implements Initializable {
                 throw new RuntimeException(e);
             }
             catch (ValidationException e){
+                productTotalPriceTxt.setText("0");
                 return;
             }
             Integer quantity = Integer.parseInt(qt);
@@ -225,7 +226,7 @@ public class OrderController implements Initializable {
         quantityOrderColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         unitPriceOrderColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
         totalPriceOrderColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
-        if (orderList.size() > 0) {
+        if (!orderList.isEmpty()) {
             containerOrderTableView.setVisible(true);
         }
         else {
@@ -244,6 +245,12 @@ public class OrderController implements Initializable {
                 product.setQuantity(product.getQuantity() + orderTable.getQuantity());
                 productRepository.update(product, product.getId());
                 orderList.remove(orderTable);
+                if (!orderList.isEmpty()) {
+                    containerOrderTableView.setVisible(true);
+                }
+                else {
+                    containerOrderTableView.setVisible(false);
+                }
                 orderObservableList = FXCollections.observableArrayList(orderList);
                 orderTableView.setItems(orderObservableList);
                 setOrderTotalPriceTxt();

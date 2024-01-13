@@ -42,11 +42,11 @@ abstract class ActionCellImpl
 
         String editIcon = "edit.png";
         String deleteIcon = "delete.png";
-        String addPurchage = "warning.png";
+        String addPurchase = "plus.png";
 
         this.editButton = makeActionButton("", edit, edithover,  editIcon);
         this.deleteButton = makeActionButton("", delete, deleteHover,  deleteIcon);
-        this.purchageButton = makeActionButton("", edit, edithover,  addPurchage);
+        this.purchageButton = makeActionButton("", edit, edithover,  addPurchase);
         actionCell =new HBox(purchageButton, editButton, deleteButton);
         actionCell.setSpacing(5.0);
    //     setGraphic(this.actionCell);
