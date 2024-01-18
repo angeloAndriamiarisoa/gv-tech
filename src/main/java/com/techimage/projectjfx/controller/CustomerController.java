@@ -2,7 +2,7 @@ package com.techimage.projectjfx.controller;
 
 import com.techimage.projectjfx.controller.dialog.Dialog;
 import com.techimage.projectjfx.controller.dialog.OwnAlert;
-import com.techimage.projectjfx.controller.table.CustomerActionCellImpl;
+import com.techimage.projectjfx.controller.table.cell.CustomerActionCell;
 import com.techimage.projectjfx.controller.toast.Toast;
 import com.techimage.projectjfx.model.Customer;
 import com.techimage.projectjfx.repository.CustomerRepository;
@@ -92,35 +92,31 @@ public class CustomerController implements Initializable {
         tableCustomer.setItems(customerList);
         actionsColumn.setCellFactory(param -> {
 
-            try {
-                return new CustomerActionCellImpl() {
-                    @Override
-                    public void edit() {
-                        tableCustomer.getSelectionModel().select(this.getIndex());
-                        customerToEdit = tableCustomer.getSelectionModel().getSelectedItem();
-                        try {
-                            showDialog();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+            return new CustomerActionCell() {
+                @Override
+                public void edit() {
+                    tableCustomer.getSelectionModel().select(this.getIndex());
+                    customerToEdit = tableCustomer.getSelectionModel().getSelectedItem();
+                    try {
+                        showDialog();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                @Override
+                public void delete() {
+                    tableCustomer.getSelectionModel().select(this.getIndex());
+                    Customer customer = tableCustomer.getSelectionModel().getSelectedItem();
+                    ButtonBar.ButtonData result =  OwnAlert.optionalAlert("Voulez vous vraiment supprimer ce client ?");
+                    if(result == ButtonBar.ButtonData.OK_DONE) {
+                        customerRepository.delete(customer.getPhone());
+                        Toast.start("Client supprimé!", Toast.SUCCESS);
+                        fillTable(pagination.getCurrentPageIndex() + 1);
                     }
 
-                    @Override
-                    public void delete() {
-                        tableCustomer.getSelectionModel().select(this.getIndex());
-                        Customer customer = tableCustomer.getSelectionModel().getSelectedItem();
-                        ButtonBar.ButtonData result =  OwnAlert.optionalAlert("Voulez vous vraiment supprimer ce client ?");
-                        if(result == ButtonBar.ButtonData.OK_DONE) {
-                            customerRepository.delete(customer.getPhone());
-                            Toast.start("Client supprimé!", Toast.SUCCESS);
-                            fillTable(pagination.getCurrentPageIndex() + 1);
-                        }
-
-                    }
-                };
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+                }
+            };
         });
     }
 

@@ -2,8 +2,7 @@ package com.techimage.projectjfx.controller;
 
 import com.techimage.projectjfx.controller.dialog.Dialog;
 import com.techimage.projectjfx.controller.dialog.OwnAlert;
-import com.techimage.projectjfx.controller.table.CustomerActionCellImpl;
-import com.techimage.projectjfx.controller.table.ProductActionCellImpl;
+import com.techimage.projectjfx.controller.table.cell.ProductActionCell;
 import com.techimage.projectjfx.controller.toast.Toast;
 import com.techimage.projectjfx.model.Product;
 import com.techimage.projectjfx.model.Purchase;
@@ -152,7 +151,8 @@ public class ProductController implements Initializable {
         productList = FXCollections.observableArrayList(this.productRepository.findAll(page));
         tableProduct.setItems(productList);
         actionsColumn.setCellFactory(param -> {
-            return new ProductActionCellImpl() {
+
+            return new ProductActionCell() {
                 @Override
                 public void edit() {
                     tableProduct.getSelectionModel().select(this.getIndex());
@@ -191,7 +191,11 @@ public class ProductController implements Initializable {
                         throw new RuntimeException(e);
                     }
                 }
+
             };
+       //     return new ProductActionCellImpl() {
+
+        //    };
         });
     }
     private void fillPurchaseTable (Integer page) {

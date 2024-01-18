@@ -1,8 +1,8 @@
 package com.techimage.projectjfx.controller;
 
 import com.techimage.projectjfx.annotations.TextValidation;
-import com.techimage.projectjfx.controller.table.OrderListActionCellImpl;
-import com.techimage.projectjfx.controller.table.ProductSingleActionCellImpl;
+import com.techimage.projectjfx.controller.table.cell.OrderListActionCell;
+import com.techimage.projectjfx.controller.table.cell.OrderProductActionCell;
 import com.techimage.projectjfx.exception.ValidationException;
 import com.techimage.projectjfx.model.Order;
 import com.techimage.projectjfx.model.OrderTableView;
@@ -201,23 +201,35 @@ public class OrderController implements Initializable {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         unitColumn.setCellValueFactory(new PropertyValueFactory<>("unit"));
         unitPriceColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
-        totalPriceOrderColumn.setCellValueFactory(new  PropertyValueFactory<>("totalPrice"));
+
+        idColumn.minWidthProperty().bind(productTableView.widthProperty().multiply(0.1));
+        nameColumn.minWidthProperty().bind(productTableView.widthProperty().multiply(0.3));
+        unitColumn.minWidthProperty().bind(productTableView.widthProperty().multiply(0.1));
+        unitPriceColumn.minWidthProperty().bind(productTableView.widthProperty().multiply(0.2));
+        actionColumn.minWidthProperty().bind(productTableView.widthProperty().multiply(0.3));
+
+        idColumn.maxWidthProperty().bind(productTableView.widthProperty().multiply(0.1));
+        nameColumn.maxWidthProperty().bind(productTableView.widthProperty().multiply(0.3));
+        unitColumn.maxWidthProperty().bind(productTableView.widthProperty().multiply(0.1));
+        unitPriceColumn.maxWidthProperty().bind(productTableView.widthProperty().multiply(0.2));
+        actionColumn.maxWidthProperty().bind(productTableView.widthProperty().multiply(0.3));
 
         productList = FXCollections.observableArrayList(this.productRepository.findAll(page));
         productTableView.setItems(productList);
-        actionColumn.setCellFactory(param -> new ProductSingleActionCellImpl (){
-            @Override
-            public void add() {
-                productTableView.getSelectionModel().select(getIndex());
-                productSelected = productTableView.getSelectionModel().getSelectedItem();
-                idProductTxt.setText(productSelected.getId());
-                nameTxt.setText(productSelected.getName());
-                unitTxt.setText(productSelected.getUnit());
-                unitPriceTxt.setText(productSelected.getUnitPrice().toString());
-                quantityTxt.clear();
-                addProduct.setDisable(false);
-            }
-        });
+        actionColumn.setCellFactory(param ->
+                new OrderProductActionCell() {
+                    @Override
+                    public void add() {
+                        productTableView.getSelectionModel().select(getIndex());
+                        productSelected = productTableView.getSelectionModel().getSelectedItem();
+                        idProductTxt.setText(productSelected.getId());
+                        nameTxt.setText(productSelected.getName());
+                        unitTxt.setText(productSelected.getUnit());
+                        unitPriceTxt.setText(productSelected.getUnitPrice().toString());
+                        quantityTxt.clear();
+                        addProduct.setDisable(false);
+                    }
+                });
     }
 
     private void fillOrderTable () {
@@ -226,6 +238,20 @@ public class OrderController implements Initializable {
         quantityOrderColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         unitPriceOrderColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
         totalPriceOrderColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
+
+        idProductOrderColumn.minWidthProperty().bind(orderTableView.widthProperty().multiply(0.1));
+        productOrderColumn.minWidthProperty().bind(orderTableView.widthProperty().multiply(0.2));
+        quantityOrderColumn.minWidthProperty().bind(orderTableView.widthProperty().multiply(0.1));
+        unitPriceOrderColumn.minWidthProperty().bind(orderTableView.widthProperty().multiply(0.1));
+        totalPriceOrderColumn.minWidthProperty().bind(orderTableView.widthProperty().multiply(0.2));
+        actionOrderColumn.minWidthProperty().bind(orderTableView.widthProperty().multiply(0.3));
+
+        idProductOrderColumn.maxWidthProperty().bind(orderTableView.widthProperty().multiply(0.1));
+        productOrderColumn.maxWidthProperty().bind(orderTableView.widthProperty().multiply(0.2));
+        quantityOrderColumn.maxWidthProperty().bind(orderTableView.widthProperty().multiply(0.1));
+        unitPriceOrderColumn.maxWidthProperty().bind(orderTableView.widthProperty().multiply(0.1));
+        totalPriceOrderColumn.maxWidthProperty().bind(orderTableView.widthProperty().multiply(0.2));
+        actionOrderColumn.maxWidthProperty().bind(orderTableView.widthProperty().multiply(0.3));
         if (!orderList.isEmpty()) {
             containerOrderTableView.setVisible(true);
         }
@@ -234,9 +260,9 @@ public class OrderController implements Initializable {
         }
         orderObservableList = FXCollections.observableArrayList(orderList);
         orderTableView.setItems(orderObservableList);
-        actionOrderColumn.setCellFactory(param -> new OrderListActionCellImpl(){
+        actionOrderColumn.setCellFactory(param -> new OrderListActionCell(){
             @Override
-            public void remove() {
+            public void delete() {
                 orderTableView.getSelectionModel().select(getIndex());
                 OrderTableView orderTable = orderTableView.getSelectionModel().getSelectedItem();
                 String id = orderTable.getIdProduct();

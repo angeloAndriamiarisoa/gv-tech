@@ -24,7 +24,13 @@ public class Dashboard implements Initializable  {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         LineChart lineChart = initLineChart();
+        lineChart.setOnMouseClicked(mouseEvent -> {
+            System.out.println("axe x --> " + lineChart.getXAxis().toString());
+            System.out.println("axe y --> " + lineChart.getYAxis());
+
+        });
         anchorPane.getChildren().add(lineChart);
+
 
     }
 
@@ -53,7 +59,6 @@ public class Dashboard implements Initializable  {
 
         // Ajouter les séries au LineChart
         lineChart.getData().addAll(series1, series2);
-
         // Personnaliser les couleurs des lignes
         String colorStyle1 = "-fx-stroke: #FF0000;"; // Rouge
         String colorStyle2 = "-fx-stroke: #00FF00;"; // Vert
